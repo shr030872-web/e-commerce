@@ -23,11 +23,17 @@
   },
   "homepage": "https://github.com/shr030872-web/ecommerce-backend-new#readme",
   "dependencies": {
+<<<<<<< HEAD
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+=======
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+>>>>>>> 43ff1e52cf8c5cf67b62806cb609616e656e628a
     "mongoose": "^9.4.1"
   }
 }
