@@ -20,7 +20,7 @@ function Orders() {
         };
 
         fetchOrders();
-    }, []);
+    }, [userId]);
 
     return (
         <div style={{ padding: "20px" }}>
