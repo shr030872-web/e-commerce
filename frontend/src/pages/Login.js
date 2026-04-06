@@ -24,8 +24,8 @@ function Login() {
     const handleSubmit = async () => {
     try {
         const url = isLogin
-            ? "https://ecommerce-backend-new-3ntn.onrender.com/api/auth/login"
-            : "https://ecommerce-backend-new-3ntn.onrender.com/api/auth/signup";
+            ? "https://e-commerce-fxy9.onrender.com/api/auth/login"
+            : "https://e-commerce-fxy9.onrender.com/api/auth/signup";
 
         const res = await axios.post(url, form);
 

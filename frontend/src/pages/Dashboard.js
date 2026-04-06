@@ -11,7 +11,7 @@ function Dashboard() {
                 const token = localStorage.getItem("token");
 
                 const res = await axios.get(
-                    "https://ecommerce-backend-new-3ntn.onrender.com/api/auth/dashboard",
+                    "https://e-commerce-fxy9.onrender.com/api/auth/dashboard",
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }

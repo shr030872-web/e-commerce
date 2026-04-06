@@ -8,7 +8,7 @@ function Orders() {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const res = await fetch(`https://ecommerce-backend-new-3ntn.onrender.com/api/orders/${userId}`);
+                const res = await fetch(`https://e-commerce-fxy9.onrender.com/api/orders/${userId}`);
                 const data = await res.json();
 
                 console.log("Orders:", data); // debug

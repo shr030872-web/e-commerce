@@ -11,7 +11,7 @@ function Products() {
 
     const fetchProducts = async () => {
         try {
-            const res = await fetch("http://localhost:5000/api/products");
+            const res = await fetch("https://e-commerce-fxy9.onrender.com/api/products");
             const data = await res.json();
             setProducts(data);
         } catch (error) {
@@ -41,7 +41,7 @@ function Products() {
         };
 
         try {
-            await fetch("http://localhost:5000/api/products", {
+            await fetch("https://e-commerce-fxy9.onrender.com/api/products", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(newProduct)
@@ -65,7 +65,7 @@ function Products() {
 // Delete Product (Admin)
     const deleteProduct = async (id) => {
         try {
-            await fetch(`https://ecommerce-backend-new-3ntn.onrender.com/api/products/${id}`, {
+            await fetch(`https://e-commerce-fxy9.onrender.com/api/products/${id}`, {
                 method: "DELETE"
             });
             setMsg(" Product deleted successfully");

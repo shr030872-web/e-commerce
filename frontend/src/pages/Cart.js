@@ -63,7 +63,7 @@ const removeItem = (index) => {
     setMsg("Payment Successful ");
 
     try {
-        await fetch("https://ecommerce-backend-new-3ntn.onrender.com/api/orders", {
+        await fetch("https://e-commerce-fxy9.onrender.com/api/orders", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

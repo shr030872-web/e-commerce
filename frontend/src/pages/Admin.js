@@ -4,12 +4,12 @@ function Admin() {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        fetch("https://ecommerce-backend-new-3ntn.onrender.com/api/orders")
+        fetch("https://e-commerce-fxy9.onrender.com/api/orders")
             .then(res => res.json())
             .then(data => setOrders(data));
     }, []);
     const deleteOrder = async (id) => {
-    await fetch(`https://ecommerce-backend-new-3ntn.onrender.com/api/orders/${id}`, {
+    await fetch(`https://e-commerce-fxy9.onrender.com/api/orders/${id}`, {
         method: "DELETE"
     });
 
