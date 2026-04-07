@@ -93,7 +93,7 @@ function Cart() {
 
     return (
         <div style={{ padding: "20px" }}>
-            <h1 style={{ textAlign: "center" }}>My Cart 🛒</h1>
+            <h1 style={{ textAlign: "center" }}>My Cart </h1>
 
             {msg && (
                 <p style={{
