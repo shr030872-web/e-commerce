@@ -83,7 +83,7 @@ function Cart() {
         }
 
         const options = {
-            key: "rzp_test_1234567890", // replace with your test key if needed
+            key: "rzp_test_Sab5jrvPrQ6b1b", // replace with your test key if needed
             amount: total * 100,
             currency: "INR",
             name: "E-Commerce App",
