@@ -4,7 +4,7 @@ function Cart() {
     const [cart, setCart] = useState([]);
     const [msg, setMsg] = useState("");
 
-    // Load cart from localStorage
+    // Load cart
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
         setCart(storedCart);
@@ -16,14 +16,14 @@ function Cart() {
         localStorage.setItem("cart", JSON.stringify(newCart));
     };
 
-    // Increase quantity
+    // Increase qty
     const increaseQty = (index) => {
         const newCart = [...cart];
         newCart[index].qty = (newCart[index].qty || 1) + 1;
         updateCart(newCart);
     };
 
-    // Decrease quantity
+    // Decrease qty
     const decreaseQty = (index) => {
         const newCart = [...cart];
 
@@ -43,13 +43,13 @@ function Cart() {
         updateCart(newCart);
     };
 
-    // Total calculation
+    // Total
     const total = cart.reduce(
         (sum, item) => sum + item.price * (item.qty || 1),
         0
     );
 
-    // Save order to backend
+    // Save order
     const placeOrder = async () => {
         try {
             await fetch("https://e-commerce-fxy9.onrender.com/api/orders", {
@@ -75,7 +75,7 @@ function Cart() {
         }
     };
 
-    // Razorpay payment handler
+    // Razorpay Payment
     const handleRazorpayPayment = () => {
         if (cart.length === 0) {
             setMsg("Cart is empty");
@@ -83,27 +83,34 @@ function Cart() {
         }
 
         const options = {
-            key: "rzp_test_Sab5jrvPrQ6b1b", // replace with your test key if needed
+            key: "rzp_test_Sab5jrvPrQ6b1b",
             amount: total * 100,
             currency: "INR",
             name: "E-Commerce App",
             description: "Order Payment",
 
             handler: function (response) {
-                console.log(response);
+                alert("Payment Successful (Demo)");
                 placeOrder();
+            },
+
+            modal: {
+                ondismiss: function () {
+                    setMsg("⚠️ Payment cancelled or failed");
+                }
             },
 
             prefill: {
                 name: "Test User",
                 email: "test@example.com",
-                contact: "999999999"
+                contact: "9999999999"
             },
+
             notes: {
                 address: "Test Address"
             },
 
-            _theme: {
+            theme: {
                 color: "#3399cc"
             }
         };
@@ -119,7 +126,7 @@ function Cart() {
             {msg && (
                 <p style={{
                     textAlign: "center",
-                    color: msg.includes("Error") ? "red" : "green",
+                    color: msg.includes("❌") ? "red" : "green",
                     fontWeight: "bold"
                 }}>
                     {msg}
@@ -160,7 +167,6 @@ function Cart() {
                         Total: ₹{total}
                     </h2>
 
-                    {/* FINAL PAYMENT BUTTON */}
                     <div style={{ textAlign: "center" }}>
                         <button
                             onClick={handleRazorpayPayment}
