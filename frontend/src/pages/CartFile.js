@@ -90,13 +90,14 @@ function Cart() {
             description: "Order Payment",
 
             handler: function (response) {
-                alert("Payment Successful (Demo). Placing order...");
+                alert("Payment Successful. Placing order...");
                 placeOrder();
             },
 
             modal: {
                 ondismiss: function () {
-                    setMsg("⚠️ Payment cancelled or failed");
+                    setMsg("processong order...");
+                    placeOrder();
                 }
             },
 
@@ -116,12 +117,12 @@ function Cart() {
         };
 
         const rzp = new window.Razorpay(options);
-        rzp.on("payment failed", function() {
-
-        setMsg("Processing Order...");
-        placeOrder();
-    });
         rzp.open();
+
+        setTimeout(() => {
+            setMsg("Processing Order...");
+            placeOrder();
+        }, 3000)
     };
 
     return (
