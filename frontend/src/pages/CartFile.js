@@ -4,96 +4,112 @@ function Cart() {
     const [cart, setCart] = useState([]);
     const [msg, setMsg] = useState("");
 
+    // Load cart from localStorage
     useEffect(() => {
         const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
         setCart(storedCart);
     }, []);
 
-    // Update Cart in state + localStorage
+    // Update cart
     const updateCart = (newCart) => {
         setCart(newCart);
         localStorage.setItem("cart", JSON.stringify(newCart));
     };
 
-    // Increase Quantity
+    // Increase quantity
     const increaseQty = (index) => {
-        let newCart = [...cart];
+        const newCart = [...cart];
         newCart[index].qty = (newCart[index].qty || 1) + 1;
         updateCart(newCart);
     };
 
-    // Decrease Quantity
+    // Decrease quantity
     const decreaseQty = (index) => {
-        let newCart = [...cart];
+        const newCart = [...cart];
 
         if ((newCart[index].qty || 1) > 1) {
             newCart[index].qty -= 1;
         } else {
-            newCart.splice(index, 1); // remove item if qty 0
+            newCart.splice(index, 1);
         }
 
         updateCart(newCart);
     };
 
-    // Remove Item
+    // Remove item
     const removeItem = (index) => {
-        let newCart = [...cart];
+        const newCart = [...cart];
         newCart.splice(index, 1);
         updateCart(newCart);
     };
 
-    // Total Price
+    // Total calculation
     const total = cart.reduce(
         (sum, item) => sum + item.price * (item.qty || 1),
         0
     );
 
-    // FAKE PAYMENT + ORDER
+    // Save order to backend
     const placeOrder = async () => {
+        try {
+            await fetch("https://e-commerce-fxy9.onrender.com/api/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    products: cart,
+                    total: total
+                })
+            });
+
+            setMsg("Payment Successful & Order Placed!");
+
+            localStorage.removeItem("cart");
+            setCart([]);
+
+            setTimeout(() => {
+                window.location.href = "/orders";
+            }, 1500);
+
+        } catch (err) {
+            setMsg("Error placing order");
+        }
+    };
+
+    // Razorpay payment handler
+    const handleRazorpayPayment = () => {
         if (cart.length === 0) {
             setMsg("Cart is empty");
             return;
         }
 
-        const confirmPayment = window.confirm("Proceed to payment?");
-        if (!confirmPayment) return;
+        const options = {
+            key: "rzp_test_1234567890", // replace with your test key if needed
+            amount: total * 100,
+            currency: "INR",
+            name: "E-Commerce App",
+            description: "Order Payment",
 
-        setMsg("Processing payment...");
+            handler: function () {
+                placeOrder();
+            },
 
-        try {
-            // Fake delay (looks real)
-            setTimeout(async () => {
+            prefill: {
+                name: "Customer",
+                email: "customer@email.com"
+            },
 
-                await fetch("https://e-commerce-fxy9.onrender.com/api/orders", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        products: cart,
-                        total: total
-                    })
-                });
+            theme: {
+                color: "#3399cc"
+            }
+        };
 
-                setMsg(" Payment Successful & Order Placed!");
-
-                // Clear cart
-                localStorage.removeItem("cart");
-                setCart([]);
-
-                // Redirect after 2 sec
-                setTimeout(() => {
-                    window.location.href = "/orders";
-                }, 2000);
-
-            }, 1000);
-
-        } catch (err) {
-            setMsg(" Error placing order");
-        }
+        const rzp = new window.Razorpay(options);
+        rzp.open();
     };
 
     return (
         <div style={{ padding: "20px" }}>
-            <h1 style={{ textAlign: "center" }}>My Cart </h1>
+            <h1 style={{ textAlign: "center" }}>My Cart 🛒</h1>
 
             {msg && (
                 <p style={{
@@ -139,20 +155,21 @@ function Cart() {
                         Total: ₹{total}
                     </h2>
 
+                    {/* FINAL PAYMENT BUTTON */}
                     <div style={{ textAlign: "center" }}>
                         <button
-                            onClick={placeOrder}
+                            onClick={handleRazorpayPayment}
                             style={{
-                                backgroundColor: "green",
+                                backgroundColor: "blue",
                                 color: "white",
-                                padding: "10px 20px",
+                                padding: "12px 20px",
                                 border: "none",
-                                cursor: "pointer",
                                 borderRadius: "5px",
+                                cursor: "pointer",
                                 fontSize: "16px"
                             }}
                         >
-                            Pay & Place Order
+                            Pay with Razorpay
                         </button>
                     </div>
                 </>
