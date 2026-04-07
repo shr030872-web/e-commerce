@@ -13,11 +13,11 @@ app.use(express.json());
 // ROUTES
 const productRoutes = require("./routes/Product");
 const authRoutes = require("./routes/auth");
-const orderRoutes = require("./routes/order"); 
+const orderRoutes = require("./routes/Order"); 
 
-app.use("/api/products", productRoutes);
+app.use("/api/Products", productRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/orders", orderRoutes);
+app.use("/api/Orders", orderRoutes);
 
 // TEST ROUTE
 app.get("/", (req, res) => {
