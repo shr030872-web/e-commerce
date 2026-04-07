@@ -96,7 +96,7 @@ function Cart() {
 
             modal: {
                 ondismiss: function () {
-                    setMsg("Payment closed. placing order...");
+                    setMsg("Order placed (Demo Mode)");
                     placeOrder();
                 }
             },
