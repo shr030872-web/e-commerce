@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 function Cart() {
     const [cart, setCart] = useState([]);
     const [msg, setMsg] = useState("");
+    const [showCompleteBtn, setShowCompleteBtn] = useState(false);
 
     // Load cart
     useEffect(() => {
@@ -16,14 +17,14 @@ function Cart() {
         localStorage.setItem("cart", JSON.stringify(newCart));
     };
 
-    // Increase qty
+    // Increase quantity
     const increaseQty = (index) => {
         const newCart = [...cart];
         newCart[index].qty = (newCart[index].qty || 1) + 1;
         updateCart(newCart);
     };
 
-    // Decrease qty
+    // Decrease quantity
     const decreaseQty = (index) => {
         const newCart = [...cart];
 
@@ -61,10 +62,11 @@ function Cart() {
                 })
             });
 
-            setMsg("Payment Successful & Order Placed!");
+            setMsg("Order Placed Successfully!");
 
             localStorage.removeItem("cart");
             setCart([]);
+            setShowCompleteBtn(false);
 
             setTimeout(() => {
                 window.location.href = "/orders";
@@ -75,7 +77,7 @@ function Cart() {
         }
     };
 
-    // Razorpay Payment
+    // Razorpay open (UI only)
     const handleRazorpayPayment = () => {
         if (cart.length === 0) {
             setMsg("Cart is empty");
@@ -89,26 +91,10 @@ function Cart() {
             name: "E-Commerce App",
             description: "Order Payment",
 
-            handler: function (response) {
-                alert("Payment Successful. Placing order...");
-                placeOrder();
-            },
-
-            modal: {
-                ondismiss: function () {
-                    setMsg("Order placed (Demo Mode)");
-                    placeOrder();
-                }
-            },
-
             prefill: {
                 name: "Test User",
                 email: "test@example.com",
                 contact: "9999999999"
-            },
-
-            notes: {
-                address: "Test Address"
             },
 
             theme: {
@@ -118,6 +104,10 @@ function Cart() {
 
         const rzp = new window.Razorpay(options);
         rzp.open();
+
+        // Show manual complete button
+        setShowCompleteBtn(true);
+        setMsg("After payment, click Complete Order");
     };
 
     return (
@@ -127,7 +117,7 @@ function Cart() {
             {msg && (
                 <p style={{
                     textAlign: "center",
-                    color: msg.includes("❌") ? "red" : "green",
+                    color: msg.includes("Error") ? "red" : "green",
                     fontWeight: "bold"
                 }}>
                     {msg}
@@ -168,6 +158,7 @@ function Cart() {
                         Total: ₹{total}
                     </h2>
 
+                    {/* Pay Button */}
                     <div style={{ textAlign: "center" }}>
                         <button
                             onClick={handleRazorpayPayment}
@@ -184,6 +175,25 @@ function Cart() {
                             Pay with Razorpay
                         </button>
                     </div>
+
+                    {/* Complete Order Button */}
+                    {showCompleteBtn && (
+                        <div style={{ textAlign: "center", marginTop: "20px" }}>
+                            <button
+                                onClick={placeOrder}
+                                style={{
+                                    backgroundColor: "green",
+                                    color: "white",
+                                    padding: "10px 20px",
+                                    border: "none",
+                                    borderRadius: "5px",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                Complete Order
+                            </button>
+                        </div>
+                    )}
                 </>
             )}
         </div>
