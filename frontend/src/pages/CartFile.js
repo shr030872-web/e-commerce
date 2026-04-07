@@ -96,7 +96,7 @@ function Cart() {
 
             modal: {
                 ondismiss: function () {
-                    setMsg("processong order...");
+                    setMsg("Payment closed. placing order...");
                     placeOrder();
                 }
             },
@@ -118,11 +118,6 @@ function Cart() {
 
         const rzp = new window.Razorpay(options);
         rzp.open();
-
-        setTimeout(() => {
-            setMsg("Processing Order...");
-            placeOrder();
-        }, 3000)
     };
 
     return (
