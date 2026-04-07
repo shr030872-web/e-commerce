@@ -89,16 +89,21 @@ function Cart() {
             name: "E-Commerce App",
             description: "Order Payment",
 
-            handler: function () {
+            handler: function (response) {
+                console.log(response);
                 placeOrder();
             },
 
             prefill: {
-                name: "Customer",
-                email: "customer@email.com"
+                name: "Test User",
+                email: "test@example.com",
+                contact: "999999999"
+            },
+            notes: {
+                address: "Test Address"
             },
 
-            theme: {
+            _theme: {
                 color: "#3399cc"
             }
         };
