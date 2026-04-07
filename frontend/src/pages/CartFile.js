@@ -90,7 +90,7 @@ function Cart() {
             description: "Order Payment",
 
             handler: function (response) {
-                alert("Payment Successful (Demo)");
+                alert("Payment Successful (Demo). Placing order...");
                 placeOrder();
             },
 
@@ -116,6 +116,11 @@ function Cart() {
         };
 
         const rzp = new window.Razorpay(options);
+        rzp.on("payment failed", function() {
+
+        setMsg("Processing Order...");
+        placeOrder();
+    });
         rzp.open();
     };
 
