@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 
+const stripePromise = loadStripe("pk_test_51TJZQ13i55zySdtBh5JQJfnUpGirP0lSztD3BNKsv8Y4mN0SpfqG18pAUHLZQuvHvHskLyl71etrstt7WnHfMuK6005gTSYko1"); 
 function Cart() {
     const [cart, setCart] = useState([]);
     const [msg, setMsg] = useState("");
-    const [showCompleteBtn, setShowCompleteBtn] = useState(false);
 
     // Load cart
     useEffect(() => {
@@ -62,11 +63,10 @@ function Cart() {
                 })
             });
 
-            setMsg("Order Placed Successfully!");
+            setMsg("Payment Successful & Order Placed!");
 
             localStorage.removeItem("cart");
             setCart([]);
-            setShowCompleteBtn(false);
 
             setTimeout(() => {
                 window.location.href = "/orders";
@@ -77,37 +77,21 @@ function Cart() {
         }
     };
 
-    // Razorpay open (UI only)
-    const handleRazorpayPayment = () => {
+    // Stripe Payment (SIMULATED SUCCESS)
+    const handleStripePayment = async () => {
         if (cart.length === 0) {
             setMsg("Cart is empty");
             return;
         }
 
-        const options = {
-            key: "rzp_test_Sab5jrvPrQ6b1b",
-            amount: total * 100,
-            currency: "INR",
-            name: "E-Commerce App",
-            description: "Order Payment",
+        setMsg("Processing payment...");
 
-            prefill: {
-                name: "Test User",
-                email: "test@example.com",
-                contact: "9999999999"
-            },
+        const stripe = await stripePromise;
 
-            theme: {
-                color: "#3399cc"
-            }
-        };
-
-        const rzp = new window.Razorpay(options);
-        rzp.open();
-
-        // Show manual complete button
-        setShowCompleteBtn(true);
-        setMsg("After payment, click Complete Order");
+        // Simulate payment success after 2 sec
+        setTimeout(() => {
+            placeOrder();
+        }, 2000);
     };
 
     return (
@@ -158,12 +142,12 @@ function Cart() {
                         Total: ₹{total}
                     </h2>
 
-                    {/* Pay Button */}
+                    {/* STRIPE PAYMENT BUTTON */}
                     <div style={{ textAlign: "center" }}>
                         <button
-                            onClick={handleRazorpayPayment}
+                            onClick={handleStripePayment}
                             style={{
-                                backgroundColor: "blue",
+                                backgroundColor: "purple",
                                 color: "white",
                                 padding: "12px 20px",
                                 border: "none",
@@ -172,28 +156,9 @@ function Cart() {
                                 fontSize: "16px"
                             }}
                         >
-                            Pay with Razorpay
+                            Pay with Stripe
                         </button>
                     </div>
-
-                    {/* Complete Order Button */}
-                    {showCompleteBtn && (
-                        <div style={{ textAlign: "center", marginTop: "20px" }}>
-                            <button
-                                onClick={placeOrder}
-                                style={{
-                                    backgroundColor: "green",
-                                    color: "white",
-                                    padding: "10px 20px",
-                                    border: "none",
-                                    borderRadius: "5px",
-                                    cursor: "pointer"
-                                }}
-                            >
-                                Complete Order
-                            </button>
-                        </div>
-                    )}
                 </>
             )}
         </div>
